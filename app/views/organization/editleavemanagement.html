@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<div class="content-container" ng-controller="EditLeaveManagementController">
+    <ul class="breadcrumb">
+        <li><a href="#/feestructure">{{'label.anchor.feestructure' | translate}}</a></li>
+    </ul>
+    <wizard current-step="step">
+        <div class="card-content">
+            <form name="editleaveDetailsform" novalidate="" class="card form-horizontal well" rc-submit="submit()">
+                <api-validate></api-validate>
+                <fieldset>
+                    <legend>{{'label.heading.editfeestructureDetails' | translate}}</legend>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">
+                            {{'label.input.office' | translate}} <span ng-show="forceOffice == null" class="required">*</span>
+                        </label>
+                        <div class="col-sm-3">
+                            <div ng-show="forceOffice == null">
+                                <select  id="officeId" ng-model="formData.office"  class="form-control"
+                                         ng-options="office.id as office.name for office in offices" value="{{office.id}}"
+                                         ng-change="changeOffice(formData.officeId)"></select>
+                            </div>
+                            <div ng-show="forceOffice != null">
+                                <p class="form-control-static">{{forceOffice.name}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">{{'label.input.department' | translate}}<span class="required" >*</span></label>
+                        <div class="col-sm-3">
+                            <select   id="departmentId" ng-model="formData.departmentid"  class="form-control"
+                                     ng-options="department.id as department.name for department in departments" value="{{department.id}}">
+                                <option value="">--{{'label.menu.department' | translate}}--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">{{'label.input.session' | translate}}</label>
+                        <div class="col-sm-3">
+                            <select  id="sessionId" ng-model="formData.sessionid"  class="form-control"
+                                     ng-options="session.id as session.name for session in sessions" value="{{session.id}}">
+                                <option value="">--{{'label.menu.selectSession' | translate}}--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" >{{'label.input.is_active' | translate}} </label>
+                        <div class="col-sm-3">
+                            <input class="input-mini-small" type="checkbox"
+                                   ng-model="formData.isActive">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <legend>{{'label.anchor.leavemanagement' | translate}} <a class="btn btn-primary" style="float:right;" ng-click="addLeaveDetails()">{{'label.button.add' | translate }}</a>
+
+                        </legend>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="form-group">
+                            <div class="col-md-3"><span class="required" >*</span> <label >{{'label.add.leavetype'|translate}}</label></div>
+                            <div class="col-md-2"><span class="required" ng-show="isFacultyRequired">*</span><label>{{'label.input.noOfDays'|translate}}</label></div>
+                            <div class="col-md-2">&nbsp;<label>{{'label.remove.row'|translate}}</label> </div>
+
+                        </div>
+
+                        <div class="form-group" ng-repeat="leavedetail in  leavedetails track by $index">
+                            <ng-form name="formleaveDetails" novalidate="" rc-submit="submit()">
+                                <div class="col-md-3">
+                                    <select   id="leaveTypes" name="leaveTypes" ng-model="leavedetail.leaveType.id"
+                                              class="form-control"
+                                              ng-options="leaveType.id as leaveType.name for leaveType in leaveTypes"
+                                              value="{{leaveType.id}}" >
+                                        <option value=""> {{'label.menu.period' | translate}}</option>
+                                    </select>  <span class="error"></span>
+
+                                </div>
+                            </ng-form>
+
+                            <ng-form name="noOfLeave" novalidate="" rc-submit="submit()">
+                                <div class="col-md-2">
+                                    <input   class="form-control" id="noOfLeave" name="noOfLeave" ng-model="leavedetail.noOfLeave"  ng-pattern="/^[0-9]+$/" />
+                                    </select>
+                                </div>
+                                <div class="col-sm-2"><span ng-show="editleaveDetailsform.noOfLeave.$invalid && editleaveDetailsform.noOfLeave.$dirty"> <small class="required" >
+                           {{'label.mustbenumeric' | translate}}
+                        </small>
+                        </span>
+                                </div>
+                            </ng-form>
+
+                            <ng-form>
+                                <div class="col-md-2">
+                                    <button class="btn-warning" type="button" has-permission='DELETE_LEAVEMANAGEMENT'
+                                            data-ng-click="deleteLeaveDetails($index)"><i class="fa fa-trash-o "></i>
+                                    </button>
+                                </div>
+                            </ng-form>
+
+                        </div>
+                    </div>
+                    <div class="col-md-offset-4">
+                        <a id="cancel" ng-href="{{cancel}}" class="btn btn-default">{{'label.button.cancel' | translate}}</a>
+                        <button id="save" type="submit" class="btn btn-primary" ng-hide="blockUI"
+                                has-permission='UPDATE_LEAVEMANAGEMENT'>{{'label.button.save' | translate}}
+                        </button>
+                        <button class="btn btn-info" ng-show="blockUI"><strong>{{'label.button.processing' |
+                            translate}}</strong></button>
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
+        </wz-step>
+    </wizard>
+</div>

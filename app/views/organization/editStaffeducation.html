@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<div class="content-container" id="backgrou" ng-controller="EditStaffEducationController">
+    <ul class="breadcrumb">
+        <li><a href="#/organization">{{'label.anchor.organization' | translate}}</a></li>
+        <li><a href="#/employees">{{'label.anchor.manageemployees' | translate}}</a></li>
+        <li class="active">{{'label.heading.editstaffEducation' | translate}}</li>
+    </ul>
+    <wizard current-step="step">
+        <!--
+                <wz-step icon="fa fa-circle-o" data-title="{{'label.heading.createstaffExperience' | translate}}">
+        -->
+        <div class="card-content">
+            <form name="editstaffEduform" novalidate="" class="card form-horizontal well" rc-submit="submit()">
+                <api-validate></api-validate>
+                <fieldset>
+                    <legend>{{'label.heading.Education Details' | translate}}</legend>
+
+                    <div class="customrow">
+                        <table class="table ">
+                            <thead>
+                            <tr>
+                                <th >{{'label.heading.schoolDetails'|translate}}</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="organasation">{{ 'label.input.organasation' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-8">
+                            <input placeholder="" type="text" id="organasation" name="organasation"
+                                   ng-model="ten.organasation" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="qualificationId">{{ 'label.input.Qualification' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <select chosen="qualifications" id="qualificationId" ng-model="ten.qualification" class="form-control"
+                                    ng-options="qualification.id as qualification.name for qualification in qualifications" value="{{qualification.id}}">
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-2">{{'label.input.degreeDetail' | translate}}<span
+                                class="required">*</span></label>
+                        <div class="col-sm-3">
+                            <select chosen="degreedetails" id="degreedetailId" ng-model="ten.degreedetailId"  class="form-control"
+                                    ng-options="degreedetail.id as degreedetail.name for degreedetail in degreedetails" value="{{degreedetail.id}}">
+                                <option value="">--{{'label.menu.degreeDetail' | translate}}--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="totalmarks">{{ 'label.input.totalmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="totalmarks" name="totalmarks"
+                                   ng-model="ten.totalmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="editstaffEduform.totalmarks.$error.pattern">Only Numbers</span>
+                        </div>
+                        <label class="control-label col-md-2" for="obtainmarks">{{ 'label.input.obtainmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="obtainmarks" name="obtainmarks"
+                                   ng-model="ten.obtainmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="editstaffEduform.obtainmarks.$error.pattern">Only Numbers</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="stream">{{ 'label.input.stream' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <input type="text" id="stream" name="stream" ng-model="ten.stream" class="form-control" required ng-pattern="/(^[A-z])[A-z.'-]*/" late-Validate/>
+                        </div>
+                        <label class="control-label col-sm-2">{{ 'label.input.passingyear' | translate }}</label>
+                        <div class="col-sm-3">
+                            <input id="passingyear" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="ten.passingyear"
+                                   class="form-control" is-open="opened" min="minDate" max="restrictDate"/>
+                        </div>
+                    </div>
+                    <div class="customrow">
+                        <table class="table ">
+                            <thead>
+                            <tr>
+                                <th >{{'label.heading.12th Details'|translate}}</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="organasation12">{{ 'label.input.organasation' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-8">
+                            <input placeholder="" type="text" id="organasation12" name="organasation12"
+                                   ng-model="twlve.organasation" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="qualificationId12">{{ 'label.input.Qualification' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <select chosen="qualifications" id="qualificationId12" ng-model="twlve.qualification" class="form-control"
+                                    ng-options="qualification.id as qualification.name for qualification in qualifications" value="{{qualification.id}}">
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-2">{{'label.input.degreeDetail' | translate}}<span
+                                class="required">*</span></label>
+                        <div class="col-sm-3">
+                            <select chosen="degreedetails" id="degreedetailId12" ng-model="twlve.degreedetailId"  class="form-control"
+                                    ng-options="degreedetail.id as degreedetail.name for degreedetail in degreedetails" value="{{degreedetail.id}}">
+                                <option value="">--{{'label.menu.degreeDetail' | translate}}--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="totalmarks">{{ 'label.input.totalmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="totalmarks12" name="totalmarks12"
+                                   ng-model="twlve.totalmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="editstaffEduform.totalmarks12.$error.pattern">Only Numbers</span>
+                        </div>
+                        <label class="control-label col-md-2" for="obtainmarks">{{ 'label.input.obtainmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="obtainmarks12" name="obtainmarks12"
+                                   ng-model="twlve.obtainmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="editstaffEduform.obtainmarks12.$error.pattern">Only Numbers</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="stream">{{ 'label.input.stream' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <input type="text" id="stream12" name="stream12" ng-model="twlve.stream" class="form-control" required ng-pattern="/(^[A-z])[A-z.'-]*/" late-Validate/>
+                        </div>
+                        <label class="control-label col-sm-2">{{ 'label.input.passingyear' | translate }}</label>
+                        <div class="col-sm-3">
+                            <input id="passingyear12" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="twlve.passingyear"
+                                   class="form-control" is-open="opened" min="minDate" max="restrictDate"/>
+                        </div>
+                    </div>
+
+                    <div class="customrow">
+                        <table class="table ">
+                            <thead>
+                            <tr>
+                                <th > {{'label.heading.gradutaion Deatails'|translate}}
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="organasationb">{{ 'label.input.organasation' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-8">
+                            <input placeholder="" type="text" id="organasationb" name="organasationb"
+                                   ng-model="bachelor.organasation" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="qualificationId">{{ 'label.input.Qualification' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <select chosen="qualifications" id="qualificationIdb" ng-model="bachelor.qualification" class="form-control"
+                                    ng-options="qualification.id as qualification.name for qualification in qualifications" value="{{qualification.id}}">
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-2">{{'label.input.degreeDetail' | translate}}<span
+                                class="required">*</span></label>
+                        <div class="col-sm-3">
+                            <select chosen="degreedetails" id="degreedetailIdb" ng-model="bachelor.degreedetailId"  class="form-control"
+                                    ng-options="degreedetail.id as degreedetail.name for degreedetail in degreedetails" value="{{degreedetail.id}}">
+                                <option value="">--{{'label.menu.degreeDetail' | translate}}--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="totalmarks">{{ 'label.input.totalmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="totalmarksb" name="totalmarksb"
+                                   ng-model="bachelor.totalmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="editstaffEduform.totalmarksb.$error.pattern">Only Numbers</span>
+                        </div>
+                        <label class="control-label col-md-2" for="obtainmarks">{{ 'label.input.obtainmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="obtainmarksb" name="obtainmarksb"
+                                   ng-model="bachelor.obtainmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="editstaffEduform.obtainmarksb.$error.pattern">Only Numbers</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="stream">{{ 'label.input.stream' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <input type="text" id="streamb" name="streamb" ng-model="bachelor.stream" class="form-control" required ng-pattern="/(^[A-z])[A-z.'-]*/" late-Validate/>
+                        </div>
+                        <label class="control-label col-sm-2">{{ 'label.input.passingyear' | translate }}</label>
+                        <div class="col-sm-3">
+                            <input id="passingyearb" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="bachelor.passingyear"
+                                   class="form-control" is-open="opened" min="minDate" max="restrictDate"/>
+                        </div>
+                    </div>
+
+                    <div class="customrow">
+                        <table class="table ">
+                            <thead>
+                            <tr>
+                                <th > {{'label.heaing.Post Graduation Details'|translate}})</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="organasationm">{{ 'label.input.organasation' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-8">
+                            <input placeholder="" type="text" id="organasationm" name="organasationm"
+                                   ng-model="master.organasation" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="qualificationId">{{ 'label.input.Qualification' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <select chosen="qualifications" id="qualificationIdm" ng-model="master.qualification" class="form-control"
+                                    ng-options="qualification.id as qualification.name for qualification in qualifications" value="{{qualification.id}}">
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-2">{{'label.input.degreeDetail' | translate}}<span
+                                class="required">*</span></label>
+                        <div class="col-sm-3">
+                            <select chosen="degreedetails" id="degreedetailIdm" ng-model="master.degreedetailId"  class="form-control"
+                                    ng-options="degreedetail.id as degreedetail.name for degreedetail in degreedetails" value="{{degreedetail.id}}">
+                                <option value="">--{{'label.menu.degreeDetail' | translate}}--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="totalmarks">{{ 'label.input.totalmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="totalmarksm" name="totalmarksm"
+                                   ng-model="master.totalmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="editstaffEduform.totalmarks.$error.pattern">Only Numbers</span>
+                        </div>
+                        <label class="control-label col-md-2" for="obtainmarks">{{ 'label.input.obtainmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="obtainmarksm" name="obtainmarksm"
+                                   ng-model="master.obtainmarkm" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="editstaffEduform.obtainmarksm.$error.pattern">Only Numbers</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="stream">{{ 'label.input.stream' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <input type="text" id="streamm" name="streamm" ng-model="master.stream" class="form-control" required ng-pattern="/(^[A-z])[A-z.'-]*/" late-Validate/>
+                        </div>
+                        <label class="control-label col-sm-2">{{ 'label.input.passingyear' | translate }}</label>
+                        <div class="col-sm-3">
+                            <input id="passingyearm" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="master.passingyear"
+                                   class="form-control" is-open="opened" min="minDate" max="restrictDate"/>
+                        </div>
+                    </div>
+
+                    <div class="customrow">
+                        <table class="table ">
+                            <thead>
+                            <tr>
+                                <th > {{'label.heading.other Eduaction'|translate}}</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="organasationo">{{ 'label.input.organasation' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-8">
+                            <input placeholder="" type="text" id="organasationo" name="organasationm"
+                                   ng-model="others.organasation" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="qualificationIdo">{{ 'label.input.Qualification' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <select chosen="qualifications" id="qualificationIdo" ng-model="others.qualification" class="form-control"
+                                    ng-options="qualification.id as qualification.name for qualification in qualifications" value="{{qualification.id}}">
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-2">{{'label.input.degreeDetail' | translate}}<span
+                                class="required">*</span></label>
+                        <div class="col-sm-3">
+                            <select chosen="degreedetails" id="degreedetailIdo" ng-model="others.degreedetailId"  class="form-control"
+                                    ng-options="degreedetail.id as degreedetail.name for degreedetail in degreedetails" value="{{degreedetail.id}}">
+                                <option value="">--{{'label.menu.degreeDetail' | translate}}--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="totalmarkso">{{ 'label.input.totalmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="totalmarkso" name="totalmarkso"
+                                   ng-model="others.totalmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="creatstaffEduform.totalmarkso.$error.pattern">Only Numbers</span>
+                        </div>
+                        <label class="control-label col-md-2" for="obtainmarkso">{{ 'label.input.obtainmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="obtainmarkso" name="obtainmarkso"
+                                   ng-model="others.obtainmarkm" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="editstaffEduform.obtainmarkso.$error.pattern">Only Numbers</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="streamo">{{ 'label.input.stream' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <input type="text" id="streamo" name="streamo" ng-model="others.stream" class="form-control" required ng-pattern="/(^[A-z])[A-z.'-]*/" late-Validate/>
+                        </div>
+                        <label class="control-label col-sm-2">{{ 'label.input.passingyear' | translate }}</label>
+                        <div class="col-sm-3">
+                            <input id="passingyearo" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="others.passingyear"
+                                   class="form-control" is-open="opened" min="minDate" max="restrictDate"/>
+                        </div>
+                    </div>
+
+                    <div class="col-md-offset-3">
+                        <a id="cancel" href="#/employees">
+                            <button type="reset" class="btn btn-default">{{'label.button.cancel'| translate}}</button>
+                        </a>
+                        <button id="save" type="submit" class="btn btn-primary" has-permission='CREATE_STAFF'>{{'label.button.save'| translate}}</button>
+                    </div>
+
+
+                </fieldset>
+
+            </form>
+        </div>
+        <!--
+                </wz-step>
+        -->
+    </wizard>
+</div>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<div class="content-container" ng-controller="ViewFeeStructureController">
+    <ul class="breadcrumb">
+        <a href="#/feestructure">{{'label.anchor.feestructure' | translate}}</a></li>
+    </ul>
+    <wizard current-step="step">
+        <wz-step icon="fa fa-circle-o" data-title="{{'label.heading.createschoolCalendar' | translate}}">
+            <div class="card-content">
+                <form name="viewfeestructureForm" novalidate="" class="card form-horizontal well" rc-submit="submit()">
+                    <api-validate></api-validate>
+                    <fieldset>
+                        <legend>{{'label.heading.feestructureDetails' | translate}}</legend>
+                        <div class="row" style="margin-left:-1px;margin-right: 1px;">
+                            <div class="col-sm-8 col-md-8">
+                                <table class="table table-striped table-bordered" >
+                                    <tr>
+                                        <th class="table-bold-loan">{{'label.input.office' | translate}}</th>
+                                        <td>{{feeDataData.officeName}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-bold-loan">{{'label.input.class'  | translate}}</th>
+                                        <td><span class="padded-td">{{feeDataData.classs.name}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-bold-loan">{{'label.input.session'  | translate}}</th>
+                                        <td><span class="padded-td">{{feeDataData.session.name}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-bold-loan">{{'label.input.is_active'  | translate}}</th>
+                                        <td><span class="padded-td">{{feeDataData.isactive}}</span></td>
+
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <legend>{{'label.heading.feestructureDetails' | translate}} <a class="btn btn-primary" style="float:right;"
+                                                        ng-click="routeToEditfeeStructure(feeDataData.id)" >{{'label.button.edit' | translate }}</a>
+                            </legend>
+                        </div>
+
+                        <div class="row">
+                            <table class="table table-striped .width100">
+                                <thead>
+                                <tr>
+                                    <th class="col-md-2"><span class="required" ng-show="isPeriodRequired">*</span> <label >Fee Name</label></th>
+                                    <th class="col-md-3"><span class="required" ng-show="isTimeDurationRequired">*</span><label>Amount</label></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr  ng-repeat="fee in feeDetail track by $index">
+                                    <td>{{fee.feeName.name}}</td>
+                                    <td>{{fee.feeAmount}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </wz-step>
+    </wizard>
+</div>

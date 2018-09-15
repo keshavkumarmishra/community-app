@@ -219,39 +219,29 @@
 											</button>
 										</span>
 								</div>
-								<div  data-ng-show="charges.length">
-									<div class="span gray-head">
+                             <div>
+								  <div class="span gray-head">
 											<span class="boldlabel">
-												  <strong>{{ 'label.heading.upcomingcharges' | translate }}</strong>
+												  <strong>{{ 'label.heading.educationdetails' | translate }}</strong>
 											</span>
 									</div>
 									<table class="table table-condensed">
 										<tr class="graybg">
-											<th>{{'label.heading.name' | translate}}</th>
-											<th>{{'label.heading.dueasof' | translate}}</th>
-											<th>{{'label.heading.due' | translate}}</th>
-											<th>{{'label.heading.paid' | translate}}</th>
-											<th>{{'label.heading.waived' | translate}}</th>
-											<th>{{'label.heading.outstanding' | translate}}</th>
-											<th>{{'label.heading.actions' | translate}}</th>
+											<th>{{'label.input.organasation' | translate}}</th>
+											<th></th>
+											<th></th>
+											<th>{{'label.input.fromdate' | translate}}</th>
+											<th>{{'label.input.todate' | translate}}</th>
+											<th>{{'label.input.fromclass' | translate}}</th>
+											<th>{{'label.input.toclass' | translate}}</th>
+
 										</tr>
-										<tr class="pointer-main" ng-repeat="charge in charges">
-											<td class="pointer" data-ng-click="routeToCharge(charge.id)">
-												<i class="fa fa-stop  {{ (!(charge.isWaived || charge.isPaid)) |StatusLookup}}" ></i>&nbsp;{{charge.name}}
-											</td>
-											<td class="pointer" data-ng-click="routeToCharge(charge.id)">{{charge.dueDate|DateFormat}}</td>
-											<td class="pointer" data-ng-click="routeToCharge(charge.id)">{{charge.amount | number}}</td>
-											<td class="pointer" data-ng-click="routeToCharge(charge.id)">{{charge.amountPaid | number}}</td>
-											<td class="pointer" data-ng-click="routeToCharge(charge.id)">{{charge.amountWaived | number}}</td>
-											<td class="pointer" data-ng-click="routeToCharge(charge.id)">{{charge.amountOutstanding | number}}</td>
-											<td class="pointer center">
-												<a uib-tooltip="{{'label.button.paycharge' | translate}}" has-permission='PAY_CLIENTCHARGE' ng-href="#/viewclient/{{client.id}}/paycharge/{{charge.id}}" class="btn btn-xs btn-primary ng-binding">
-													<i class="fa fa-dollar "></i>
-												</a>&thinsp;
-												<a uib-tooltip="{{'label.button.waivecharge' | translate}}" has-permission='WAIVE_CLIENTCHARGE' ng-click="waiveCharge(charge.id)" class="btn btn-xs btn-primary ng-binding">
-													<i class="fa fa-flag "></i>
-												</a>
-											</td>
+										<tr ng-repeat="education in educationArray">
+											<td colspan="3"> {{education.organasation}}</td>
+											<td>{{education.fromdate|DateFormat}}</td>
+											<td >{{education.todate | DateFormat}}</td>
+											<td >{{education.fromclassLabel }}</td>
+											<td >{{education.toclassLabel}}</td>
 										</tr>
 									</table>
 								</div>
@@ -754,7 +744,7 @@
 
 				<!--family tab-->
 
-				<uib-tab ng-show="families" heading="{{'label.heading.familymembers' | translate}}" >
+				<!--<uib-tab ng-show="families" heading="{{'label.heading.familymembers' | translate}}" >
 					<div ng-show="families">
 						<button class="btn btn-primary pull-right" ng-click="routeToaddFamilyMember()"><i class="icon-plus icon-white"></i>{{'label.button.addfamilymember' | translate}}</button>
 						<br>
@@ -894,7 +884,7 @@
 				</uib-tab>
 
 
-				<!--end of family tab-->
+-->				<!--end of family tab-->
 
 				<uib-tab heading="{{'label.heading.identities' | translate}}" select="getClientIdentityDocuments()"
 						 has-permission='READ_CLIENTIDENTIFIER'>

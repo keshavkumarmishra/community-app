@@ -13,6 +13,10 @@
             var apiVer = '/fineract-provider/api/v1';
 
             var getUserDetails = function(data){
+               alert(data.user.officeId);
+                alert(data.user.office.officeId);
+                alert(data.user.officeId);
+
 
                 localStorageService.addToLocalStorage('tokendetails', data);
                 setTimer(data.expires_in);

@@ -1,6 +1,6 @@
 (function (module) {
     mifosX.controllers = _.extend(module, {
-        LoginFormController: function (scope, authenticationService, resourceFactory, httpService, $timeout) {
+        LoginFormController: function (scope,authenticationService, resourceFactory, httpService, $timeout) {
             scope.loginCredentials = {};
             scope.passwordDetails = {};
             scope.authenticationFailed = false;
@@ -56,7 +56,7 @@
             };
         }
     });
-    mifosX.ng.application.controller('LoginFormController', ['$scope', 'AuthenticationService', 'ResourceFactory', 'HttpService','$timeout', mifosX.controllers.LoginFormController]).run(function ($log) {
+    mifosX.ng.application.controller('LoginFormController', ['$scope','AuthenticationService', 'ResourceFactory', 'HttpService','$timeout', mifosX.controllers.LoginFormController]).run(function ($log) {
         $log.info("LoginFormController initialized");
     });
 }(mifosX.controllers || {}));

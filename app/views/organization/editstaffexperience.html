@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<div class="content-container" ng-controller="EditStaffExperienceController">
+    <ul class="breadcrumb">
+        <li><a href="#/organization">{{'label.anchor.organization' | translate}}</a></li>
+        <li><a href="#/employees">{{'label.anchor.manageemployees' | translate}}</a></li>
+        <li class="active">{{'label.heading.editstaffExperience' | translate}}</li>
+    </ul>
+    <wizard current-step="step">
+        <div class="card-content">
+            <form name="editstaffExperienceform" novalidate="" class="card form-horizontal well" rc-submit="submit()">
+                <api-validate></api-validate>
+                <fieldset>
+                    <legend>{{'label.heading.editstaffExperience' | translate}}</legend>
+                            <div class="row">
+
+                        <div class="form-group">
+                            <div class="col-md-3"><span class="required">*</span> <label >{{'label.input.organasation'|translate}}</label></div>
+                            <div class="col-md-2"><span class="required">*</span><label>{{'label.input.stream'|translate}}</label></div>
+                            <div class="col-md-2"><span class="required">*</span><label>{{'label.heading.fromdate'|translate}}</label></div>
+                            <div class="col-md-2"><span class="required">*</span><label>{{'label.heading.todate'|translate}}</label></div>
+                            <div class="col-md-2"><span class="required">*</span><label>{{'label.heading.noofmonths'|translate}}</label> </div>
+                            <div class="col-md-1"><span class="required">*</span><label>{{'label.remove.row'|translate}}</label> </div>
+
+                        </div>
+
+                        <div class="form-group" ng-repeat="experience in formData.sexperience track by $index">
+                            <ng-form name="organasation" novalidate="" rc-submit="submit()">
+                                <div class="col-md-3">
+                                    <input type="text" id="organasation" name="organasation" ng-model="experience.organasation"  class="form-control" />
+                                    </select>
+                                </div>
+                            </ng-form>
+                            <ng-form name="stream" novalidate="" rc-submit="submit()">
+                                <div class="col-md-2">
+                                    <input type="text" id="stream" name="stream" ng-model="experience.stream" class="form-control" />
+                                    </select>
+                                </div>
+                            </ng-form>
+                            <ng-form name="fromDate" novalidate="" rc-submit="submit()">
+                                <div class="col-md-2">
+                                    <input id="fromDate" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="experience.fromDate"
+                                           class="form-control" is-open="opened" min="minDate" max="restrictDate"/>
+                                </div>
+                            </ng-form>
+
+                            <ng-form name="toDate" novalidate="" rc-submit="submit()">
+                                <div class="col-md-2">
+                                    <input id="toDate" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="experience.toDate"
+                                           class="form-control" is-open="opened" min="minDate" max="restrictDate"/>
+                                </div>
+                            </ng-form>
+                            <ng-form name="noOfmonths" novalidate="" rc-submit="submit()">
+                                <div class="col-md-2">
+                                    <input type="text" id="noOfmonths" name="noOfmonths" ng-model="fee.noOfmonths" class="form-control" />
+                                    </select>
+                                </div>
+                            </ng-form>
+
+                            <ng-form>
+                                <div class="col-md-1"><!--<span><a ng-click="deleteCalendarDetails($index)"><i class="icon-remove icon-blur"></i></a></span> jjj-->
+                                    <button class="btn-warning" type="button"
+                                            data-ng-click="deletestaffExperience($index)"><i class="fa fa-trash-o "></i>
+                                    </button>
+                                </div>
+                            </ng-form>
+                        </div>
+                        <div class="col-md-offset-4">
+                            <a id="cancel" ng-href="{{cancel}}" class="btn btn-default">{{'label.button.cancel' | translate}}</a>
+                            <button id="save" type="submit" class="btn btn-primary" ng-hide="blockUI"
+                                    has-permission='CREATE_STAFF'>{{'label.button.save' | translate}}
+                            </button>
+                            <button class="btn btn-info" ng-show="blockUI"><strong>{{'label.button.processing' |
+                                translate}}</strong></button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        </wz-step>
+    </wizard>
+</div>

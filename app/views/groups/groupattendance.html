@@ -9,15 +9,30 @@
                 <api-validate></api-validate>
                 <fieldset>
                     <div class="form-group">
+                        <label class="control-label col-sm-2">{{'label.input.class' | translate}}</label>
+                        <div class="col-sm-2">
+                            <select  chosen="classes" id="classId" ng-model="formData.class"  class="form-control"
+                                     ng-options="class1.id as class1.name for class1 in classes" value="{{class1.id}}">
+                                <option value="">--{{'label.menu.class' | translate}}--</option>
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-2">{{'label.input.section' | translate}}</label>
+                        <div class="col-sm-2">
+                            <select  chosen="sections" id="sectionId" ng-model="formData.section"  class="form-control"
+                                     ng-options="section.id as section.name for section in sections" value="{{section.id}}">
+                                <option value="">--{{'label.menu.section' | translate}}--</option>
+                            </select>
+                        </div>
                         <label class="control-label col-sm-2">{{'label.input.meetingdate' | translate}}<span
                                 class="required">*</span></label>
 
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <input type="text" datepicker-pop="dd MMMM yyyy" ng-model="first.date" is-open="opened"
-                                   min="minDate" max="'2020-06-22'" class="form-control"/>{{'label.nextmettingon' |
-                            translate}}:{{meeting.nextTenRecurringDates[0] | DateFormat}}
+                                   min="minDate" max="'2020-06-22'" class="form-control"/>
                         </div>
-                        <div class="col-sm-5">
+                    </div>
+                    <div class="form-group">
+                         <div class="col-sm-4">
                             <table class="table table-striped" width="100%">
                                 <thead>
                                 <tr class="graybg">
@@ -26,7 +41,30 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr ng-repeat="client in clients">
+                                <tr ng-repeat="client in clients1">
+                                    <td>{{client.displayName}}-{{78}}</td>
+                                    <td>
+                                        <div>
+                                            <select ng-model="client.attendanceType"
+                                                    ng-options="attendance.id as attendance.value for attendance in attendanceOptions"
+                                                    value="{{attendance.id}}" class="form-control">
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                         </div>
+                        <div class="col-sm-4">
+                            <table class="table table-striped" width="100%">
+                                <thead>
+                                <tr class="graybg">
+                                    <th>{{ 'label.heading.name' | translate }}</th>
+                                    <th>{{ 'label.heading.attendance' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="client in clients2">
                                     <td>{{client.displayName}}<span class="required">*</span></td>
                                     <td>
                                         <div>
@@ -40,7 +78,30 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                        <div class="col-sm-4">
+                            <table class="table table-striped" width="100%">
+                                <thead>
+                                <tr class="graybg">
+                                    <th>{{ 'label.heading.name' | translate }}</th>
+                                    <th>{{ 'label.heading.attendance' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="client in clients3">
+                                    <td>{{client.displayName}}<span class="required">*</span></td>
+                                    <td>
+                                        <div>
+                                            <select ng-model="client.attendanceType"
+                                                    ng-options="attendance.id as attendance.value for attendance in attendanceOptions"
+                                                    value="{{attendance.id}}" class="form-control">
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     <div class="col-md-offset-5">
                         <a id="cancel" href="#/viewgroup/{{group.id}}" class="btn btn-default">{{'label.button.cancel' | translate}}</a>
                         <button id="save" type="button" class="btn btn-primary" data-ng-click="attendanceUpdate(meeting.id)" has-permission='SAVEORUPDATEATTENDANCE_MEETING'> {{'label.button.save' | translate}} </button>

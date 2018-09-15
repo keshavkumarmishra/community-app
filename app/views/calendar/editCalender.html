@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<div class="content-container" ng-controller="EditCalendarCalendar">
+    <ul class="breadcrumb">
+        <li><a href="#/calendar">{{'label.anchor.clients' | translate}}</a></li>
+        <!--<li ng-if="groupid"><a href="#/groups">{{'label.anchor.groups' | translate}}</a></li>
+        <li ng-if="groupid"><a href="#/viewgroup/{{groupid}}">{{'label.anchor.viewgroup' | translate}}</a></li>
+        <li class="active">{{'label.anchor.createclient' | translate}}</li>
+ -->   </ul>
+    <wizard current-step="step">
+        <wz-step icon="fa fa-circle-o" data-title="{{'label.heading.createschoolCalendar' | translate}}">
+            <div class="card-content">
+                <form name="createclientform" novalidate="" class="card form-horizontal well" rc-submit="submit()">
+                    <api-validate></api-validate>
+                    <fieldset>
+                        --------------------------------
+                        <legend>{{'label.heading.createschoolCalendar' | translate}}</legend>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">
+                                {{'label.input.office' | translate}} <span ng-show="forceOffice == null" class="required">*</span>
+                            </label>
+                            <div class="col-sm-3">
+                                <div ng-show="forceOffice == null">
+                                    <select chosen="offices" id="officeId" ng-model="formData.office"  class="form-control"
+                                            ng-options="office.id as office.name for office in offices" value="{{office.id}}"
+                                            ng-change="changeOffice(formData.officeId)"></select>
+                                </div>
+                                <div ng-show="forceOffice != null">
+                                    <p class="form-control-static">{{forceOffice.name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.input.class' | translate}}</label>
+                            <div class="col-sm-3">
+                                <select  chosen="classes" id="classId" ng-model="formData.class"  class="form-control"
+                                         ng-options="class1.id as class1.name for class1 in classes" value="{{class1.id}}">
+                                    <option value="">--{{'label.menu.class' | translate}}--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.input.section' | translate}}</label>
+                            <div class="col-sm-3">
+                                <select  chosen="sections" id="sectionId" ng-model="formData.section"  class="form-control"
+                                         ng-options="section.id as section.name for section in sections" value="{{section.id}}">
+                                    <option value="">--{{'label.menu.section' | translate}}--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.input.session' | translate}}</label>
+                            <div class="col-sm-3">
+                                <select  chosen="sessions" id="sessionId" ng-model="formData.session"  class="form-control"
+                                         ng-options="session.id as session.name for session in sessions" value="{{session.id}}">
+                                    <option value="">--{{'label.menu.selectSession' | translate}}--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.input.day' | translate}}</label>
+                            <div class="col-sm-3">
+                                <select chosen="days"  id="day" name="day" ng-model="formData.day" class="form-control"
+                                        ng-options="day.id as day.name for day in days"
+                                        value="{{day.id}}" ng-required="isDayRequired">
+                                    <option value=""> {{'label.menu.selectDay' | translate}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" >{{'label.input.is_active' | translate}} </label>
+                            <div class="col-sm-3">
+                                <input class="input-mini-small" type="checkbox"
+                                       ng-model="formData.isActive">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <legend>Calendar Details <a class="btn btn-primary" style="float:right;"
+                                                        ng-click="routeTo()"
+                                                        ng-hide="formData.calendarDetails.length >= 4">{{'label.button.add' | translate }}</a>
+                            </legend>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="form-group">
+                                <div class="col-md-2"><span class="required" ng-show="isPeriodRequired">*</span> <label >Period</label></div>
+                                <div class="col-md-2"><span class="required" ng-show="isFacultyRequired">*</span><label>Time Duration</label></div>
+                                <div class="col-md-2"><span class="required" ng-show="isFacultyRequired">*</span><label>Faculty</label></div>
+                                <div class="col-md-2"><span class="required" ng-show="isSubjectRequired">*</span><label>Subject</label></div>
+                                <div class="col-md-2">&nbsp;<label>Remove</label> </div>
+
+                            </div>
+
+                            <div class="form-group" ng-repeat="calendar in formData.calendarDetails track by $index">
+                                <ng-form name="formcalendarperiod" novalidate="" rc-submit="submit()">
+                                    <div class="col-md-2">
+                                        <select id="period" name="period" ng-model="calendar.period"
+                                                class="form-control"
+                                                ng-options="period.id as period.name for period in periods"
+                                                value="{{period.id}}" ng-required="isperiodRequired">
+                                            <option value=""> {{'label.menu.period' | translate}}</option>
+                                        </select>                                        <span class="error"></span>
+
+                                        <!--
+                                                                                      ng-show="submitted && formfamilydetailsspfirstname.spfirstname.$error.required">{{'label.error.required'|translate}}</span>
+                                        -->
+
+                                    </div>
+                                </ng-form>
+
+                                <ng-form name="formcalendarperiod" novalidate="" rc-submit="submit()">
+                                    <div class="col-md-2">
+                                        <select   id="timeduration" name="timeDuration" ng-model="calendar.time"
+                                                  class="form-control"
+                                                  ng-options="timeduration.id as timeduration.name for timeduration in timedurations"
+                                                  value="{{timeduration.id}}" ng-required="istimedurationRequired">
+                                            <option value=""> {{'label.menu.timeDuration' | translate}}</option>
+                                        </select>
+                                        <span class="error"></span>
+                                        <!--
+                                                                                      ng-show="submitted && formfamilydetailsrelationship.relationship.$error.required">{{'label.error.required'|translate}}</span>
+                                        -->
+                                    </div>
+                                </ng-form>
+
+                                <ng-form name="formcalnderfaculty" novalidate="" rc-submit="submit()">
+                                    <div class="col-md-2">
+                                        <select   id="faculty" name="faculty" ng-model="calendar.staff" class="form-control"
+                                                  ng-options="faculty.id as faculty.displayName for faculty in facultys"
+                                                  value="{{faculty.id}}" ng-required="isFacultyRequired">
+                                            <option value=""> {{'label.menu.faculty' | translate}}</option>
+                                        </select>
+                                        <!--<span class="error" ng-show="submitted && formfamilydetailsgender.gender.$error.required">{{'label.error.required'|translate}}</span>-->
+                                    </div>
+                                </ng-form>
+
+                                <ng-form name="formcalndersubject" novalidate="" rc-submit="submit()">
+                                    <div class="col-md-2">
+                                        <select   id="subject" name="subject" ng-model="calendar.subject" class="form-control"
+                                                  ng-options="subject.id as subject.name for subject in subjects"
+                                                  value="{{subject.id}}" ng-required="isSubjectRequired">
+                                            <option value=""> {{'label.menu.slectSubject' | translate}}</option>
+                                        </select>
+                                        <!--<span class="error" ng-show="submitted && formfamilydetailsgender.gender.$error.required">{{'label.error.required'|translate}}</span>-->
+                                    </div>
+                                </ng-form>
+
+                                <!--<ng-form name="formcalnderday" novalidate="" rc-submit="submit()">
+                                    <div class="col-md-2">
+                                        <select  id="day" name="day" ng-model="calendar.day" class="form-control"
+                                                ng-options="day.id as day.name for day in days"
+                                                value="{{day.id}}" ng-required="isDayRequired">
+                                            <option value=""> {{'label.menu.selectDay' | translate}}</option>
+                                        </select>
+                                        &lt;!&ndash;<span class="error" ng-show="submitted && formfamilydetailsgender.gender.$error.required">{{'label.error.required'|translate}}</span>&ndash;&gt;
+                                    </div>
+                                </ng-form>-->
+                                <ng-form>
+                                    <div class="col-md-2"><!--<span><a ng-click="deleteCalendarDetails($index)"><i class="icon-remove icon-blur"></i></a></span> jjj-->
+                                        <button class="btn-warning" type="button" has-permission='DELETE_CALENDAR'
+                                                data-ng-click="deleteCalendarDetails($index)"><i class="fa fa-trash-o "></i>
+                                        </button>
+                                    </div>
+                                </ng-form>
+
+                            </div>
+                        </div>
+                        <div class="col-md-offset-4">
+                            <a id="cancel" ng-href="{{cancel}}" class="btn btn-default">{{'label.button.cancel' | translate}}</a>
+                            <button id="save" type="submit" class="btn btn-primary" ng-hide="blockUI"
+                                    has-permission='EDIT_CALENDAR'>{{'label.button.save' | translate}}
+                            </button>
+                            <button class="btn btn-info" ng-show="blockUI"><strong>{{'label.button.processing' |
+                                translate}}</strong></button>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+        </wz-step>
+    </wizard>
+</div>

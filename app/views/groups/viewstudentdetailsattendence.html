@@ -1,0 +1,69 @@
+<div class="content-container" ng-controller="ViewStudentDetailAttendenceController">
+    <div class="card">
+        <div class="content">
+            <div class="toolbar">
+                <h4>{{'label.heading.viewattendence' | translate}}</h4>
+                <div class="pull-right btn-group">
+                    <a href="#/editstudentattendence/{{studentAttendences[0].id}}/{{studentAttendences[0].classs.id}}/{{groupId}}" class="btn btn-primary"
+                       has-permission='UPDATE_STUDENTATTENDENCE'><i class="fa fa-plus "></i>{{
+                        'label.button.edit' | translate }}</a>
+                </div>
+            </div>
+            <br/>
+            <form class="form-horizontal">
+                <api-validate></api-validate>
+                <fieldset>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <table class="table table-striped" width="100%">
+                                <thead>
+                                <tr class="graybg">
+                                    <th>{{ 'label.heading.name' | translate }}</th>
+                                    <th>{{ 'label.heading.attendance' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="student1 in studentAttendences1">
+                                    <td>{{student1.studentName}}-{{student1.studentAttendenceDetailData.roolNo}}</td>
+                                    <td>{{student1.studentAttendenceDetailData.attendenceType.value}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table table-striped" width="100%">
+                                <thead>
+                                <tr class="graybg">
+                                    <th>{{ 'label.heading.name' | translate }}</th>
+                                    <th>{{ 'label.heading.attendance' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="student2 in studentAttendences2">
+                                    <td>{{student2.studentName}}-{{student2.studentAttendenceDetailData.roolNo}}</td>
+                                    <td>{{student2.studentAttendenceDetailData.attendenceType.value}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table table-striped" width="100%">
+                                <thead>
+                                <tr class="graybg">
+                                    <th>{{ 'label.heading.name' | translate }}</th>
+                                    <th>{{ 'label.heading.attendance' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="student3 in studentAttendences3">
+                                    <td>{{student3.studentName}}-{{student3.studentAttendenceDetailData.roolNo}}</td>
+                                    <td>{{student3.studentAttendenceDetailData.attendenceType.value}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

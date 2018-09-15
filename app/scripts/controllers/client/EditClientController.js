@@ -5,14 +5,24 @@
             scope.date = {};
             scope.restrictDate = new Date();
             scope.savingproducts = [];
+            scope.educationArray=[];
+            scope.familyArray=[];
             scope.clientId = routeParams.id;
             scope.showSavingOptions = 'false';
             scope.opensavingsproduct = 'false';
             scope.showNonPersonOptions = false;
             scope.clientPersonId = 1;
+            scope.relationshipIdOptions=[];
+            scope.professionIdOptions=[];
+            scope.qualifications=[];
             resourceFactory.clientResource.get({clientId: routeParams.id, template:'true', staffInSelectedOfficeOnly:true}, function (data) {
                 scope.offices = data.officeOptions;
                 scope.staffs = data.staffOptions;
+                scope.relationshipIdOptions=data.clientDetailedData.familyrelationShip;
+                scope.professionIdOptions=data.clientDetailedData.profession;
+                scope.educationArray=data.clientDetailedData.previousEducationData;
+                scope.familyArray=data.clientDetailedData.familyDetailsExtData;
+                scope.qualifications=data.clientDetailedData.educationQualification;
                 scope.savingproducts = data.savingProductOptions;
                 scope.genderOptions = data.genderOptions;
                 scope.clienttypeOptions = data.clientTypeOptions;
@@ -34,10 +44,7 @@
                     savingsProductId: data.savingsProductId,
                     genderId: data.gender.id,
                     fullname: data.fullname,
-                    clientNonPersonDetails : {
-                        incorpNumber: data.clientNonPersonDetails.incorpNumber,
-                        remarks: data.clientNonPersonDetails.remarks
-                    }
+                    officeId:data.officeId,
                 };
 
                 if(data.gender){
@@ -57,33 +64,15 @@
                     scope.formData.legalFormId = data.legalForm.id;
                 }
 
-                if(data.clientNonPersonDetails.constitution){
-                    scope.formData.clientNonPersonDetails.constitutionId = data.clientNonPersonDetails.constitution.id;
-                }
-
-                if(data.clientNonPersonDetails.mainBusinessLine){
-                    scope.formData.clientNonPersonDetails.mainBusinessLineId = data.clientNonPersonDetails.mainBusinessLine.id;
-                }
-
-                if (data.savingsProductId != null) {
-                    scope.opensavingsproduct = 'true';
-                    scope.showSavingOptions = 'true';
-                } else if (data.savingProductOptions.length > 0) {
-                    scope.showSavingOptions = 'true';
-                }
-
                 if (data.dateOfBirth) {
                     var dobDate = dateFilter(data.dateOfBirth, scope.df);
-                    scope.date.dateOfBirth = new Date(dobDate);
+                    scope.formData.dateOfBirth = new Date(dobDate);
                 }
 
-                if (data.clientNonPersonDetails.incorpValidityTillDate) {
-                    var incorpValidityTillDate = dateFilter(data.clientNonPersonDetails.incorpValidityTillDate, scope.df);
-                    scope.date.incorpValidityTillDate = new Date(incorpValidityTillDate);
-                }
 
-                var actDate = dateFilter(data.activationDate, scope.df);
-                scope.date.activationDate = new Date(actDate);
+
+                var actDate = dateFilter(data.timeline.activationDate, scope.df);
+                scope.date = new Date(actDate);
                 if (data.active) {
                     scope.choice = 1;
                     scope.showSavingOptions = 'false';
@@ -92,18 +81,12 @@
 
                 if (data.timeline.submittedOnDate) {
                     var submittedOnDate = dateFilter(data.timeline.submittedOnDate, scope.df);
-                    scope.date.submittedOnDate = new Date(submittedOnDate);
+                    scope.submittedOnDate = new Date(submittedOnDate);
                 }
 
             });
 
-            scope.displayPersonOrNonPersonOptions = function (legalFormId) {
-                if(legalFormId == scope.clientPersonId || legalFormId == null) {
-                    scope.showNonPersonOptions = false;
-                }else {
-                    scope.showNonPersonOptions = true;
-                }
-            };
+
 
             scope.submit = function () {
                 this.formData.locale = scope.optlang.code;

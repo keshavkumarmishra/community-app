@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<div class="content-container" ng-controller="EditFeeStructureController">
+    <ul class="breadcrumb">
+        <li><a href="#/feestructure">{{'label.anchor.feestructure' | translate}}</a></li>
+         </ul>
+    <wizard current-step="step">
+            <div class="card-content">
+                <form name="editfeestructureform" novalidate="" class="card form-horizontal well" rc-submit="submit()">
+                    <api-validate></api-validate>
+                    <fieldset>
+                        <legend>{{'label.heading.editfeestructureDetails' | translate}}</legend>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">
+                                {{'label.input.office' | translate}} <span ng-show="forceOffice == null" class="required">*</span>
+                            </label>
+                            <div class="col-sm-3">
+                                <div ng-show="forceOffice == null">
+                                    <select  id="officeId" ng-model="formData.office"  class="form-control"
+                                            ng-options="office.id as office.name for office in offices" value="{{office.id}}"
+                                            ng-change="changeOffice(formData.officeId)"></select>
+                                </div>
+                                <div ng-show="forceOffice != null">
+                                    <p class="form-control-static">{{forceOffice.name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.input.class' | translate}}</label>
+                            <div class="col-sm-3">
+                                <select   id="classId" ng-model="formData.class"  class="form-control"
+                                         ng-options="class.id as class.name for class in classes" value="{{class.id}}">
+                                    <option value="">--{{'label.menu.class' | translate}}--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.input.session' | translate}}</label>
+                            <div class="col-sm-3">
+                                <select  id="sessionId" ng-model="formData.session"  class="form-control"
+                                         ng-options="session.id as session.name for session in sessions" value="{{session.id}}">
+                                    <option value="">--{{'label.menu.selectSession' | translate}}--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" >{{'label.input.is_active' | translate}} </label>
+                            <div class="col-sm-3">
+                                <input class="input-mini-small" type="checkbox"
+                                       ng-model="formData.isActive">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <legend>Calendar Details <a class="btn btn-primary" style="float:right;" ng-click="addFeeDetails()">{{'label.button.add' | translate }}</a>
+
+                            </legend>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="form-group">
+                                <div class="col-md-3"><span class="required" >*</span> <label >Fees Name</label></div>
+                                <div class="col-md-2"><span class="required" ng-show="isFacultyRequired">*</span><label>Fee Amount</label></div>
+                            <div class="col-md-2">&nbsp;<label>Remove</label> </div>
+
+                            </div>
+
+                            <div class="form-group" ng-repeat="fee in  formData.feestructureDetails track by $index">
+                                <ng-form name="formfeeStructure" novalidate="" rc-submit="submit()">
+                                    <div class="col-md-3">
+                                        <select   id="fees" name="fees" ng-model="fee.feeName.id"
+                                                class="form-control"
+                                                ng-options="fee.id as fee.name for fee in fees"
+                                                value="{{fee.id}}" >
+                                            <option value=""> {{'label.menu.period' | translate}}</option>
+                                        </select>                                      <span class="error"></span>
+
+                                    </div>
+                                </ng-form>
+
+                                <ng-form name="feeAmount" novalidate="" rc-submit="submit()">
+                                    <div class="col-md-3">
+                                        <input   class="form-control" id="feeAmount" name="feeAmount" ng-model="fee.feeAmount"  ng-pattern="/^[0-9]+$/" />
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">{{editfeestructureform.feeAmount.$invalid }}-{{editfeestructureform.feeAmount.$dirty}}
+                        <span ng-show="editfeestructureform.feeAmount.$invalid && editfeestructureform.feeAmount.$dirty">
+                        <small class="required" >
+                        {{'label.mustbenumeric' | translate}}
+                        </small>
+                        </span>
+                                    </div>
+                                </ng-form>
+
+                                <ng-form>
+                                    <div class="col-md-2"><!--<span><a ng-click="deleteCalendarDetails($index)"><i class="icon-remove icon-blur"></i></a></span> jjj-->
+                                        <button class="btn-warning" type="button" has-permission='DELETE_CALENDAR'
+                                                data-ng-click="deletefeeDetails($index)"><i class="fa fa-trash-o "></i>
+                                        </button>
+                                    </div>
+                                </ng-form>
+
+                            </div>
+                        </div>
+                        <div class="col-md-offset-4">
+                            <a id="cancel" ng-href="{{cancel}}" class="btn btn-default">{{'label.button.cancel' | translate}}</a>
+                            <button id="save" type="submit" class="btn btn-primary" ng-hide="blockUI"
+                                    has-permission='EDIT_CALENDAR'>{{'label.button.save' | translate}}
+                            </button>
+                            <button class="btn btn-info" ng-show="blockUI"><strong>{{'label.button.processing' |
+                                translate}}</strong></button>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+        </wz-step>
+    </wizard>
+</div>

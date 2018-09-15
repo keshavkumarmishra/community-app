@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<div class="content-container" id="backgrou" ng-controller="EmployeeEducationController">
+    <ul class="breadcrumb">
+        <li><a href="#/organization">{{'label.anchor.organization' | translate}}</a></li>
+        <li><a href="#/employees">{{'label.anchor.manageemployees' | translate}}</a></li>
+        <li class="active">{{'label.heading.createstaffEducation' | translate}}</li>
+    </ul>
+    <wizard current-step="step">
+<!--
+        <wz-step icon="fa fa-circle-o" data-title="{{'label.heading.createstaffEducation' | translate}}">
+-->
+
+            <div class="card-content">
+                <form name="creatstaffEduform" novalidate="" class="form-horizontal" ng-controller="CreateEmployeeController"
+                      rc-submit="submit()">
+                    <api-validate></api-validate>
+                    <fieldset>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="organasation">{{ 'label.input.organasation' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <input placeholder="" type="text" id="organasation" name="organasation"
+                                   ng-model="ten.organasation" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="qualificationId">{{ 'label.input.Qualification' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <select chosen="qualifications" id="qualificationId" ng-model="ten.qualification" class="form-control"
+                                    ng-options="qualification.id as qualification.name for qualification in qualifications" value="{{qualification.id}}">
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-2">{{'label.input.degreeDetail' | translate}}<span
+                                class="required">*</span></label>
+                        <div class="col-sm-3">
+                            <select chosen="degreedetails" id="degreedetailId" ng-model="ten.degreedetailId"  class="form-control"
+                                    ng-options="degreedetail.id as degreedetail.name for degreedetail in degreedetails" value="{{degreedetail.id}}">
+                                <option value="">--{{'label.menu.degreeDetail' | translate}}--</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="totalmarks">{{ 'label.input.totalmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="totalmarks" name="totalmarks"
+                                   ng-model="ten.totalmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="creatstaffEduform.totalmarks.$error.pattern">Only Numbers</span>
+                        </div>
+                        <label class="control-label col-md-2" for="obtainmarks">{{ 'label.input.obtainmarks' | translate }} </label>
+                        <div class="col-md-3">
+                            <input placeholder="" type="text" id="obtainmarks" name="obtainmarks"
+                                   ng-model="ten.obtainmarks" class="form-control"
+                                   maxlength="6" ng-pattern="/^\d+$/"/>
+                            <span class="required"
+                                  ng-show="creatstaffEduform.obtainmarks.$error.pattern">Only Numbers</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="stream">{{ 'label.input.stream' | translate }}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-3">
+                            <input type="text" id="stream" name="stream" ng-model="ten.stream" class="form-control" required ng-pattern="/(^[A-z])[A-z.'-]*/" late-Validate/>
+                        </div>
+                        <label class="control-label col-sm-2">{{ 'label.input.passingyear' | translate }}</label>
+                        <div class="col-sm-3">
+                            <input id="passingyear" sort type="text" datepicker-pop="dd MMMM yyyy" ng-model="ten.passingyear"
+                                   class="form-control" is-open="opened" min="minDate" max="restrictDate"/>
+                        </div>
+                    </div>
+                    </fieldset>
+                </form>
+            </div>
+<!--
+        </wz-step>
+-->
+    </wizard>
+</div>

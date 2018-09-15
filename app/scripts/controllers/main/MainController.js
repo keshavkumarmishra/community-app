@@ -150,6 +150,7 @@
             scope.leftnav = false;
             scope.$on("UserAuthenticationSuccessEvent", function (event, data) {
                 scope.authenticationFailed = false;
+                $rootScope.loginuserids=data.userId;
                 scope.resetPassword = data.shouldRenewPassword;
                 if (sessionManager.get(data)) {
                     scope.currentSession = sessionManager.get(data);
@@ -160,6 +161,8 @@
                     location.path('/home').replace();
                 } else {
                     scope.loggedInUserId = data.userId;
+                    $rootScope.loginuserids=data.userId;
+
                 }
                 ;
             });

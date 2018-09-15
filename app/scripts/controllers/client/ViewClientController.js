@@ -12,6 +12,8 @@
             scope.openShares = true ;
             scope.updateDefaultSavings = false;
             scope.charges = [];
+            scope.educationArray=[];
+            scope.familyArray=[];
 
 
             // address
@@ -26,6 +28,8 @@
             resourceFactory.clientTemplateResource.get(function(data)
             {
                 scope.enableAddress=data.isAddressEnabled;
+                scope.enableAddress=true;
+
                 if(scope.enableAddress===true)
                 {
 
@@ -171,6 +175,8 @@
             scope.haveFile = [];
             resourceFactory.clientResource.get({clientId: routeParams.id}, function (data) {
                 scope.client = data;
+                scope.educationArray=data.clientDetailedData.previousEducationData;
+                scope.familyArray=data.clientDetailedData.familyDetailsExtData;
                 scope.isClosedClient = scope.client.status.value == 'Closed';
                 scope.staffData.staffId = data.staffId;
                 if (data.imagePresent) {

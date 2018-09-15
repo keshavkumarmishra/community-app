@@ -2,54 +2,1286 @@
     <ul class="breadcrumb">
         <li><a href="#/organization">{{'label.anchor.organization' | translate}}</a></li>
         <li><a href="#/employees">{{'label.anchor.manageemployees' | translate}}</a></li>
-        <li class="active">{{employee.firstname}}&nbsp;&nbsp;{{employee.lastname}}</li>
+        <li class="active">{{'label.anchor.viewemployee' | translate}}</li>
     </ul>
+	<script type="text/ng-template" id="deleteClient.html">
+		<div class="modal-header silver">
+			<h3 class="bolder">{{'label.heading.delete' | translate}}</h3>
+		</div>
+		<div class="modal-body">
+			<api-validate></api-validate>
+			<br>
+			<button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+			<button class="btn btn-primary" ng-click="delete()">{{'label.button.confirm' | translate}}</button>
+		</div>
+	</script>
+	<script type="text/ng-template" id="photo-dialog.html">
+		<div class="modal-header silver">
+			<img ng-src="{{largeImage}}" alt="Avatar">
+		</div>
+		<div class="modal-body ">
+			<button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+		</div>
+	</script>
+	<script type="text/ng-template" id="clientSignature.html">
+		<div class="modal-header silver">
+			<img ng-src="{{largeImage}}" alt="Signature">
+		</div>
+		<div class="modal-body ">
+			<button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+		</div>
+	</script>
+	<script type="text/ng-template" id="clientWithoutSignature.html">
+		<div class="modal-header silver">
+			<h3 class="bolder">{{'label.noClientSignature' | translate}}</h3>
+		</div>
+		<div class="modal-body ">
+			<button class="btn btn-warning" ng-click="cancel()">{{'label.button.ok' | translate}}</button>
+		</div>
+	</script>
 
-    <div class="card">
-        <div class="content">
-        	<div class="toolbar">
-        		<h4>{{employee.displayName}}</h4>
-        		<div class="pull-right">
-        		    <div class="btn-group">
-        		        <a href="#/editemployee/{{employee.id}}" class="btn btn-primary" has-permission='UPDATE_STAFF'><i class="fa fa-edit "></i>{{'label.button.edit' | translate}}</a>
-        		    </div>
-        		</div>
-        	</div>
-        	<br/>
-        			<div class="row">
-        				<div class="col-md-6">
-        			        <table class="table table-bordered table-striped">
-        			            <tr>
-        			                <td width="20%">{{ 'label.heading.firstname' | translate }}</td>
-        			                <td width="80%">{{employee.firstname}}</td>
-        			            </tr>
-        			            <tr>
-        			                <td>{{ 'label.heading.lastname' | translate }}</td>
-        			                <td>{{employee.lastname}}</td>
-        			            </tr>
-        			            <tr>
-        			                <td>{{ 'label.heading.office' | translate }}</td>
-        			                <td>{{employee.officeName}}</td>
-        			            </tr>
-        			            <tr>
-        			                <td>{{ 'label.heading.isLoanOfficer' | translate }}</td>
-        			                <td>{{employee.isLoanOfficer}}</td>
-        			            </tr>
-        			            <tr>
-        			                <td>{{ 'label.heading.mobileNo' | translate }}</td>
-        			                <td>{{employee.mobileNo}}</td>
-        			            </tr>
-        			            <tr>
-        			                <td>{{ 'label.active' | translate }}</td>
-        			                <td>{{employee.isActive}}</td>
-        			            </tr>
-        	                    <tr>
-        	                        <td>{{ 'label.heading.joiningDate' | translate }}</td>
-        	                        <td>{{employee.joiningDate | DateFormat}}</td>
-        	                    </tr>
-        			        </table>
-        				</div>
-        			</div>
-        </div>
+	<script type="text/ng-template" id="uploadpic.html">
+		<div class="modal-header silver">
+			<h3 class="bolder">{{'label.heading.selectclientimage' | translate}}</h3>
+		</div>
+		<div class="modal-body">
+			<api-validate></api-validate>
+			<br>
+			<input type="file" ngf-select ng-model="file">
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+			<button class="btn btn-primary" ng-click="upload(file)">{{'label.button.upload' | translate}}</button>
+		</div>
+	</script>
+	<script type="text/ng-template" id="capturepic.html">
+		<div class="modal-header silver">
+			<h3 class="bolder">{{'label.heading.captureclientimage' | translate}}</h3>
+		</div>
+		<div class="modal-body">
+			<api-validate></api-validate>
+			<div ng-show="error != null" class="error">
+				{{'label.error' | translate}}: {{error}}
+			</div>
+			<br>
+			<div>
+				<div class="left">
+					<webcam on-streaming="onVideoSuccess()"
+							on-error="onVideoError(err)" channel="videoChannel"></webcam>
+				</div>
+				<div class="right">
+					<canvas id="clientSnapshot" width="320" height="240"></canvas>
+				</div>
+			</div>
+			<div class="center" style="margin-top: 10px">
+				<button class="btn btn-warning" ng-click="takeScreenshot()">
+					<i class="fa fa-camera "></i>
+					{{'label.button.capture' | translate}}
+				</button>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+			<button class="btn btn-primary" ng-click="uploadscreenshot()">{{'label.button.upload' | translate}}</button>
+		</div>
+	</script>
+	<script type="text/ng-template" id="deletePic.html">
+		<div class="modal-header silver">
+			<h3 class="bolder">{{'label.heading.deleteclientimage' | translate}}</h3>
+		</div>
+		<div class="modal-body">
+			<api-validate></api-validate>
+			<br>
+			<button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+			<button class="btn btn-primary" ng-click="delete()">{{'label.button.confirm' | translate}}</button>
+		</div>
+	</script>
+	<script type="text/ng-template" id="clientunassignstaff.html">
+		<div class="modal-header silver">
+			<h3 class="bolder">{{'label.heading.unassignstaff' | translate}}</h3>
+		</div>
+		<div class="modal-body">
+			<api-validate></api-validate>
+			<br>
+			<button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+			<button class="btn btn-primary" ng-click="unassign()">{{'label.button.confirm' | translate}}</button>
+		</div>
+	</script>
+	<script type="text/ng-template" id="uploadsig.html">
+		<div class="modal-header silver">
+			<h3 class="bolder">{{'label.heading.selectclientsignature' | translate}}</h3>
+		</div>
+		<div class="modal-body">
+			<api-validate></api-validate>
+			<br>
+			<input type="file" ngf-select ng-model="file">
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+			<button class="btn btn-primary" ng-click="upload(file)">{{'label.button.upload' | translate}}</button>
+		</div>
+	</script>
+	<div class="card">
+		<div class="content">
+			<uib-tabset class="scrollable" tabset-name="clientTabset" scrollable persistent-tab>
+				<uib-tab heading="{{'label.heading.general' | translate}}">
+					<div class="col-md-11 col-sm-11 btn-group row pull-right">
+						<a href="{{button.href}}/{{client.id}}/{{button.subhref}}" class="btn btn-primary btn-offset"
+						   has-permission='{{button.taskPermissionName}}' ng-repeat="button in buttonsArray.singlebuttons" >
+							<i class="{{button.icon}} icon-white"></i>{{button.name | translate}}</a>
+						<button type="button" class="btn btn-primary" data-ng-click="deleteClient()"
+								data-ng-show="client.status.value=='Pending'" has-permission='DELETE_CLIENT'><i
+								class="fa fa-trash-o "></i>{{"label.button.delete"
+							| translate}}
+						</button>
+						<a href="#/client/{{client.id}}/updatedefaultaccount" class="btn btn-primary btn-offset"
+						   data-ng-show="updateDefaultSavings" has-permission='UPDATESAVINGSACCOUNT_CLIENT'><i
+								class="fa fa-edit "></i>{{"label.button.updatedefaultsavings" | translate}}
+						</a>
+						<button type="button" class="btn btn-primary" data-ng-click="unassignStaffCenter()"
+								data-ng-show="client.staffId" has-permission='UNASSIGNSTAFF_CLIENT'><i class="fa fa-user "></i>{{"label.button.unassignstaff" | translate}}
+						</button>
+						<span uib-dropdown ng-show="buttonsArray.options" class="btn-group dropdown" on-toggle="toggled(open)">
+									<a uib-dropdown-toggle class="btn btn-primary">
+										{{ 'label.button.more' | translate}}
+										<span class="caret"></span>
+									</a>
+                                    <ul class="dropdown dropdown-menu dropdown-menu-right">
+										<li class="{{button.icon}}" ng-repeat="button in buttonsArray.options">
+											<a href="#/clientscreenreport/{{client.id}}"
+											   has-permission='{{button.taskPermissionName}}'>{{'label.'+ button.name |
+												translate}}</a>
+										</li>
+										<li>
+											<a data-ng-click="uploadSig()" has-permission='CREATE_CLIENTIMAGE'>{{'label.button.uploadsig'
+												| translate}}</a>
+										</li>
+										<li data-ng-show="clientAccounts.savingsAccounts">
+											<a data-ng-click="viewstandinginstruction()" has-permission='CREATE_STANDINGINSTRUCTION'>{{'label.button.viewstandinginstruction'
+												| translate}}</a>
+										</li>
+										<li data-ng-show="clientAccounts.savingsAccounts">
+											<a data-ng-click="createstandinginstruction()" has-permission='READ_STANDINGINSTRUCTION'>{{'label.button.createstandinginstruction'
+												| translate}}</a>
+										</li>
+                                        <li data-ng-show="client.status.value=='Active'">
+											<a href="#/createshareaccount/{{client.id}}" has-permission='CREATE_SHAREACCOUNT'>{{'label.button.newshareaccount' | translate}}</a>
+										</li>
+										<li data-ng-show="client.status.value=='Active'">
+											<a href="#/newclientfixeddepositaccount/{{client.id}}" has-permission='CREATE_FIXEDDEPOSITACCOUNT'>{{'label.newfixeddepositaccount' | translate}}</a>
+										</li>
+										<li data-ng-show="client.status.value=='Active'">
+											<a href="#/newclientrecurringdepositaccount/{{client.id}}" has-permission='CREATE_RECURRINGDEPOSITACCOUNT'>{{'label.newrecurringdepositaccount' | translate}}</a>
+										</li>
+										<li >
+											<a ng-href="#{{pathToChargeOverview()}}" has-permission='READ_CLIENTCHARGE'>{{'label.button.chargesoverview' | translate }}</a>
+										</li>
+										<li class="{{button.icon}}">
+											<a href="#/clients/survey/{{client.id}}">{{'label.survey' | translate}}</a>
+										</li>
+									</ul>
+								</span>
+                    </div>
+                        <div class="row">
+                            <div class="col-md-8 col-sm-8">
+                                <legend>{{'label.heading.employeeDetails'|translate}}</legend>
+                                <div class="pull-right btn-group">
+                                    <a href="#/editemployee/{{employee.id}}" class="btn btn-primary"
+                                       has-permission='EDIT_STAFF'><i class="fa fa-plus "></i>{{
+                                        'label.button.edit' | translate }}</a>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-9 col-sm-9" >
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4">
+                                                <strong class="pull-right">{{'label.heading.title'|translate}}:</strong>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8">
+                                                {{staffdetailData.staffDataExt.displayName}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4">
+                                                <strong class="pull-right">{{'label.heading.employeeName'|translate}}:</strong>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8">
+                                                {{employee.displayName}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4">
+                                                <strong class="pull-right">{{'label.heading.externalid'|translate}}:</strong>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8">
+                                                {{staffdetailData.staffDataExt.externalId2}}
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 ">
+                                                <strong  class="pull-right">{{'label.heading.employeeType'|translate}}:</strong>
+                                            </div>
+                                            <div class="col-md-4 col-sm-8">
+                                                {{staffdetailData.staffDataExt.employeeTypeLabel}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4 ">
+                                                <strong  class="pull-right">Gender:</strong>
+                                            </div>
+                                            <div class="col-md-4 col-sm-8">
+                                                {{staffdetailData.staffDataExt.genderLabel}}
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4">
+                                                <strong   class="pull-right">Marital Status: </strong>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8">
+                                                {{staffdetailData.staffDataExt.maritalStatusLabel}}
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4">
+                                                <strong   class="pull-right">Date of Birth:</strong>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8">
+                                                {{client.dateOfBirth | DateFormat}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4">
+                                                <strong class="pull-right">{{'label.heading.mobileNo'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8">
+                                                {{employee.mobileNo}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4">
+                                                <strong class="pull-right">{{'label.input.department'|translate}}:</strong>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8">
+                                                {{staffdetailData.staffDataExt.departmentLabel}}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-4">
+                                                <strong class="pull-right">{{'label.input.designation'|translate}}:</strong>
+                                            </div>
+                                            <div class="col-md-8 col-sm-8">
+                                                {{staffdetailData.staffDataExt.designationLabel}}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <hr/>
+
+                                <hr/><!--End of Personal info-->
+
+                              <legend>{{'label.heading.commnucatioDeatils'|translate}}</legend>
+                                 <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.houseNo'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.houseNo}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.area/locality'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.areaLocality}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.landmark'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.landmark}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.taluka'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.taluka}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.state'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.stateLable}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.pincode'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.pinCode}}
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.streetNo'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.streetNo}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.villageTown'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.villageTown}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.district'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.districtLable}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.landline'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.landlineNo}}
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6" >
+                                            <strong>{{'label.heading.mobileNo'|translate}}</strong>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            {{communicationAddress.mobileNo}}
+                                        </div>
+
+                                    </div>
+                                </div>
+                                 </div>
+
+                                <hr/>
+                                    <legend>{{'label.heading.PermanentcommnucatioDeatils'|translate}}</legend>
+
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6" >
+
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.houseNo'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.houseNo}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.area/locality'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.areaLocality}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.landmark'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.landmark}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.taluka'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.taluka}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.state'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.stateLable}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.pincode'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.pinCode}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.streetNo'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.streetNo}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.villageTown'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.villageTown}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.district'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.districtLable}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.landline'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.landlineNo}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.mobileNo'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{kycAddress.mobileNo}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <legend>{{'label.heading.EmployeeNomineeDeatils'|translate}}</legend>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6" >
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>House No:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.houseNo}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Area/locality:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.areaLocality}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Land Mark:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.landmark}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Taluka:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.taluka}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>State:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.stateLable}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Pincode:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.pinCode}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Street No:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.streetNo}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Village/Town:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.villageTown}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.district'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.districtLable}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Land Line No:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.landlineNo}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.mobileNo'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.mobileNo}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <hr/>
+
+                                    <hr/>	<!--End of Personal info-->
+                                </div>
+                                <hr/>
+                                <legend>{{'label.heading.EmployeeNomineeDeatilsforInsurance'|translate}}</legend>
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-6" >
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>House No:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.houseNo}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Area/locality:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.areaLocality}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Land Mark:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.landmark}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Taluka:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.taluka}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>State:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.stateLable}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Pincode:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.pinCode}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Street No:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.streetNo}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Village/Town:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.villageTown}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>District:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.districtLable}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>Land Line No:</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.landlineNo}}
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6" >
+                                                <strong>{{'label.heading.mobileNo'|translate}}</strong>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                {{communicationAddress.mobileNo}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <hr/>
+
+                                    <hr/>	<!--End of Personal info-->
+                                </div>
+                            </div>
+                                <div class="col-md-3  col-sm-3 " >
+                                    <div class="thumbnail row">
+                                        <h4><strong>{{client.displayName}}</strong></h4>
+                                        <img ng-hide="client.imagePresent" ng-src="./images/client-image-placeholder.png" alt="Avatar">
+                                        <img ng-show="client.imagePresent"  ng-src="{{image}}" alt="Avatar" data-ng-click="showPicture()" title="{{'label.zoom' | translate}}" >
+                                        <div class="btn-group-xs center">
+                                            <button type="button" class="btn btn-primary" data-ng-click="uploadPic()" has-permission='CREATE_CLIENTIMAGE'
+                                                    uib-tooltip="{{'label.button.uploadpic' | translate}}">
+                                                <i class="fa fa-upload"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-ng-click="capturePic()" has-permission='CREATE_CLIENTIMAGE'
+                                                    uib-tooltip="{{'label.button.capturepic' | translate}}">
+                                                <i class="fa fa-camera"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary" ng-show="client.imagePresent" data-ng-click="deletePic()" has-permission='DELETE_CLIENTIMAGE'
+                                                    uib-tooltip="{{'label.button.deletepic' | translate}}">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </div>
+                                        <div ng-show="signature_url" class="show-large-picture center" data-ng-click="showSignature()"><a>{{'label.showClientSignature' | translate}}</a></div>
+                                        <div ng-hide="signature_url" class="show-large-picture center" data-ng-click="showWithoutSignature()"><a>{{'label.showClientSignature' | translate}}</a></div>
+                                        <table class="table-minified">
+                                            <tr>
+                                                <th class="table-bold">{{ 'label.input.activationdate' | translate }}</th>
+                                                <td><span class="padded-td">{{client.timeline.activatedOnDate | DateFormat}}<span
+                                                        data-ng-hide="client.timeline.activatedOnDate">{{ 'label.notactivated' | translate }}</span></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="table-bold">{{ 'label.heading.memberof' | translate }}</th>
+                                                <td>
+                                                    <span class="padded-td" data-ng-hide="client.groups">{{ 'label.unassigned' | translate }}</span>
+                                                    <span class="padded-td" ng-repeat="group in client.groups">
+										 <a class="list-group-item-text" href="#/viewgroup/{{group.id}}">{{group.name}}</a>&nbsp;<span
+                                                            data-ng-hide="client.groups">{{ 'label.unassigned' | translate }}</span><span
+                                                            ng-show="!$last">|</span>
+										</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="table-bold">{{ 'label.input.isStaff' | translate }}</th>
+                                                <td><span class="padded-td">{{client.isStaff}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr data-ng-show="client.mobileNo">
+                                                <th class="table-bold">{{ 'label.input.mobilenumber' | translate }}</th>
+                                                <td><span class="padded-td">{{client.mobileNo}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr data-ng-show="client.gender.name">
+                                                <th class="table-bold">{{ 'label.input.gender' | translate }}</th>
+                                                <td><span class="padded-td">{{client.gender.name}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr data-ng-show="client.clientType.name">
+                                                <th class="table-bold">{{ 'label.input.clienttype' | translate }}</th>
+                                                <td><span class="padded-td">{{client.clientType.name}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr data-ng-show="client.clientClassification.name">
+                                                <th class="table-bold">{{ 'label.input.clientclassification' | translate }}</th>
+                                                <td><span class="padded-td">{{client.clientClassification.name}}</span>
+                                                </td>
+                                            </tr>
+
+                                            <tr data-ng-show="client.dateOfBirth">
+                                                <th class="table-bold">{{ 'label.input.dateofbirth' | translate }}</th>
+                                                <td><span class="padded-td">{{client.dateOfBirth | DateFormat}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr data-ng-show="client.status.value=='Closed'">
+                                                <th class="table-bold">{{ 'label.heading.closedate' | translate }}</th>
+                                                <td><span class="padded-td">{{client.timeline.closedOnDate | DateFormat}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="whitebg" colspan="2">{{ 'label.heading.performancehistory' | translate }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>{{ 'label.heading.numofloancycle' | translate }}</th>
+                                                <td><span class="padded-td">{{client.ClientSummary.loanCycle}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th>{{ 'label.lastloanamount' | translate }}</th>
+                                                <td><span class="padded-td">{{client.ClientSummary.lastLoanAmount|number}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <th>{{ 'label.numofactiveloans' | translate }}</th>
+                                                <td><span class="padded-td">{{client.ClientSummary.activeLoans}}</span></td>
+                                            </tr>
+                                            <tr ng-repeat="t in totalAllSavingsAccountsBalanceBasedOnCurrency">
+                                                <th>{{ 'label.totalsavings' | translate }}({{t.code}})</th>
+                                                <td><span class="padded-td">{{t.totalSavings|number}}</span></td>
+                                            <tr>
+                                                <th>{{ 'label.numofactivesavings' | translate }}</th>
+                                                <td><span class="padded-td">{{client.ClientSummary.activeSavings}}</span></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+		          </div>
+                </uib-tab>
+
+                <uib-tab heading="{{'label.heading.Education Details' | translate}}" has-permission='READ_STAFF'>
+                    <div class="pull-right btn-group">
+                        <a href="#/addeducation/{{employee.id}}" class="btn btn-primary"
+                           has-permission='CREATE_STAFF'><i class="fa fa-plus "></i>{{
+                            'label.button.add' | translate }}</a>
+                    </div>
+                    <div class="pull-right btn-group">
+                        <a href="#/editeducation/{{employee.id}}" class="btn btn-primary"
+                           has-permission='EDITE_STAFF'><i class="fa fa-plus "></i>{{
+                            'label.button.edit' | translate }}</a>
+                    </div>
+                    <legend>{{'label.heading.schoolDetails'|translate}}</legend>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6" >
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.Qualification' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.houseNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.degreeDetail' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.areaLocality}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.totalmarks' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.landmark}}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.organasation' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.taluka}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.stream' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.streetNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.passingyear' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.villageTown}}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6" >
+                                <strong>{{'label.input.obtainmarks' | translate}}:</strong>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                {{communicationAddress.taluka}}
+                            </div>
+                        </div>
+                     </div>
+
+                    <hr/>
+                    <legend>{{'label.heading.12th Details'|translate}}</legend>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6" >
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.Qualification' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.houseNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.degreeDetail' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.areaLocality}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.totalmarks' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.landmark}}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.organasation' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.taluka}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.stream' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.streetNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.passingyear' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.villageTown}}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6" >
+                                <strong>{{'label.input.obtainmarks' | translate}}:</strong>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                {{communicationAddress.taluka}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <legend>{{'label.heading.gradutaion Deatails'|translate}}</legend>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6" >
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.Qualification' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.houseNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.degreeDetail' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.areaLocality}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.totalmarks' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.landmark}}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.organasation' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.taluka}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.stream' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.streetNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.passingyear' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.villageTown}}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6" >
+                                <strong>{{'label.input.obtainmarks' | translate}}:</strong>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                {{communicationAddress.taluka}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <legend>{{'label.heaing.Post Graduation Details'|translate}}</legend>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6" >
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.Qualification' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.houseNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.degreeDetail' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.areaLocality}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.totalmarks' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.landmark}}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.organasation' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.taluka}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.stream' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.streetNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.passingyear' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.villageTown}}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6" >
+                                <strong>{{'label.input.obtainmarks' | translate}}:</strong>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                {{communicationAddress.taluka}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <legend>{{'label.heading.other Eduaction'|translate}}</legend>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6" >
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.Qualification' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.houseNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.degreeDetail' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.areaLocality}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.totalmarks' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.landmark}}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.organasation' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.taluka}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.stream' | translate }}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.streetNo}}
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 col-sm-6" >
+                                    <strong>{{'label.input.passingyear' | translate}}:</strong>
+                                </div>
+                                <div class="col-md-6 col-sm-6">
+                                    {{communicationAddress.villageTown}}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6" >
+                                <strong>{{'label.input.obtainmarks' | translate}}:</strong>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                {{communicationAddress.taluka}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                </uib-tab>
+                <uib-tab heading="{{'label.heading.Experience Details' | translate}}" has-permission='READ_STAFF'>
+                    <div class="pull-right btn-group">
+                        <a href="#/addexperince/{{employee.id}}" class="btn btn-primary"
+                           has-permission='CREATE_STAFF'><i class="fa fa-plus "></i>{{
+                            'label.button.add' | translate }}</a>
+                    </div>
+                    <div class="pull-right btn-group">
+                        <a href="#/editexperince/{{employee.id}}" class="btn btn-primary"
+                           has-permission='EDIT_STAFF'><i class="fa fa-plus "></i>{{
+                            'label.button.edit' | translate }}</a>
+                    </div>
+                    <legend>{{'label.heading.Experience Details'|translate}}</legend>
+                    <div class="row">
+                        <table class="table table-striped .width100">
+                            <thead>
+                            <tr>
+                                <th class="col-md-2"><label >{{'label.input.stream'|translate}}</label></th>
+                                <th class="col-md-3"><label>{{'label.input.organasation'|translate}}</label></th>
+                                <th class="col-md-2"><label >{{'label.heading.fromdate'|translate}}</label></th>
+                                <th class="col-md-3"><label>{{'label.heading.todate'|translate}}</label></th>
+                                <th class="col-md-2"><label >{{'label.heading.noofmonths'|translate}}</label></th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr  ng-repeat="experience in experinceDetail track by $index">
+                                <td>{{experience.stream}}</td>
+                                <td>{{experience.organasation}}</td>
+                                <td>{{experience.fromDate}}</td>
+                                <td>{{experience.toDate}}</td>
+                                <td>{{experience.noOfMonths}}</td>
+                                >
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </uib-tab>
+                <uib-tab heading="{{'label.heading.DocumentDetails' | translate}}" select="getClientIdentityDocuments()"
+                         has-permission='READ_STAFF'>
+                    <div class="pull-right btn-group">
+                        <a href="#/addclientidentifier/{{client.id}}" class="btn btn-primary"
+                           has-permission='CREATE_STAFF'><i class="fa fa-plus "></i>{{
+                            'label.button.add' | translate }}</a>
+                    </div>
+
+                    <br>
+                    <table class="table" ng-show="identitydocuments.length > 0">
+                        <thead>
+                        <tr class="graybg">
+                            <th>{{'label.heading.id' | translate}}</th>
+                            <th>{{'label.heading.description' | translate}}</th>
+                            <th>{{'label.heading.type' | translate}}</th>
+                            <th>{{'label.heading.identitydocuments' | translate}}</th>
+                            <th>{{'label.heading.status' | translate}}</th>
+                            <th>{{'label.heading.actions' | translate}}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="document in identitydocuments">
+                            <td>{{document.documentKey}}</td>
+                            <td>{{document.description}}</td>
+                            <td>{{document.documentType.name}}</td>
+                            <td>
+		                  <span ng-repeat="file in document.documents">
+		                    {{file.fileName}}&nbsp;&nbsp;
+		                    <a target="_blank" href="{{hostUrl}}{{file.docUrl}}" has-permission='READ_DOCUMENT'><i
+                                    class="fa fa-cloud-download"></i></a>
+		                  </span>
+                            </td>
+                            <td>{{document.status | translate}}</td>
+                            <td>
+		                  <span>
+		                      <a href="#/addclientidentifierdocument/{{client.id}}/{{document.id}}"
+                                 has-permission='CREATE_DOCUMENT'><i
+                                      class="fa fa-cloud-upload"></i></a>&nbsp;
+		                      <a ng-click="deleteClientIdentifierDocument(client.id,document.id,$index)"
+                                 has-permission='DELETE_CLIENTIDENTIFIER'><i
+                                      class="fa fa-times"></i></a>
+		                  </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </uib-tab>
+            </uib-tabset>
+	</div>
     </div>
-</div>      
+</div>

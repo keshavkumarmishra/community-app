@@ -1,0 +1,113 @@
+<div class="content-container" ng-controller="EditStudentAttendenceDetailsController">
+    <div class="card">
+        <div class="content">
+            <div class="toolbar">
+                <h4>{{'label.heading.editattendance' | translate}}</h4>
+            </div>
+            <br/>
+            <form class="form-horizontal">
+                <api-validate></api-validate>
+                <fieldset>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">{{'label.input.class' | translate}}</label>
+                        <div class="col-sm-2">
+                            <select   id="classId" ng-model="formData.class"  class="form-control"
+                                     ng-options="class1.id as class1.name for class1 in classes" value="{{class1.id}}">
+                                <option value="">--{{'label.menu.class' | translate}}--</option>
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-2">{{'label.input.section' | translate}}</label>
+                        <div class="col-sm-2">
+                            <select   id="sectionId" ng-model="formData.section"  class="form-control"
+                                     ng-options="section.id as section.name for section in sections" value="{{section.id}}">
+                                <option value="">--{{'label.menu.section' | translate}}--</option>
+                            </select>
+                        </div>
+                        <label class="control-label col-sm-2">{{'label.heading.attendenceDate' | translate}}<span
+                                class="required">*</span></label>
+
+                        <div class="col-sm-2">
+                            <input type="text" datepicker-pop="dd MMMM yyyy" ng-model="first.date" is-open="opened"
+                                   min="minDate" max="'2020-06-22'" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4">
+                            <table class="table table-striped" width="100%">
+                                <thead>
+                                <tr class="graybg">
+                                    <th>{{ 'label.heading.name' | translate }}</th>
+                                    <th>{{ 'label.heading.attendance' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="student1 in studentAttendences1">
+                                    <td>{{student1.studentName}}-{{student1.studentAttendenceDetailData.roolNo}}</td>
+                                    <td>
+                                        <div>
+                                            <select ng-model="student1.attendanceType"
+                                                    ng-options="attendance.id as attendance.value for attendance in attendanceOptions"
+                                                    value="{{attendance.id}}" class="form-control">
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table table-striped" width="100%">
+                                <thead>
+                                <tr class="graybg">
+                                    <th>{{ 'label.heading.name' | translate }}</th>
+                                    <th>{{ 'label.heading.attendance' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="student2 in studentAttendences2">
+                                    <td>{{student2.studentName}}-{{student2.studentAttendenceDetailData.roolNo}}</td>
+                                    <td>
+                                        <div>
+                                            <select ng-model="student2.attendanceType"
+                                                    ng-options="attendance.id as attendance.value for attendance in attendanceOptions"
+                                                    value="{{attendance.id}}" class="form-control">
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table table-striped" width="100%">
+                                <thead>
+                                <tr class="graybg">
+                                    <th>{{ 'label.heading.name' | translate }}</th>
+                                    <th>{{ 'label.heading.attendance' | translate }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="student3 in studentAttendences3">
+                                    <td>{{student3.studentName}}-{{student3.studentAttendenceDetailData.roolNo}}</td>
+                                    <td>
+                                        <div>
+                                            <select ng-model="student3.attendanceType"
+                                                    ng-options="attendance.id as attendance.value for attendance in attendanceOptions"
+                                                    value="{{attendance.id}}" class="form-control">
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-md-offset-5">
+                            <a id="cancel" href="#/viewgroup/{{groupId}}" class="btn btn-default">{{'label.button.cancel' | translate}}</a>
+                            <button id="save" type="button" class="btn btn-primary" data-ng-click="attendanceUpdate()" has-permission='UPDATE_STUDENTATTENDENCE'> {{'label.button.save' | translate}} </button>
+                        </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>

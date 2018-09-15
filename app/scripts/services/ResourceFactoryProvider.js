@@ -221,7 +221,9 @@
                     }),
                     employeeResource: defineResource(apiVer + "/staff/:staffId", {staffId: '@staffId',status:"all"}, {
                         getAllEmployees: {method: 'GET', params: {}, isArray: true},
-                        update: { method: 'PUT' }
+                        update: { method: 'PUT' },
+                        save: {method: 'POST', params: {}}
+
                     }),
                     globalSearch: defineResource(apiVer + "/search", {query: '@query', resource: '@resource'}, {
                         search: { method: 'GET',
@@ -677,6 +679,56 @@
                     }),
                     adHocQueryTemplateResource: defineResource(apiVer + "/adhocquery/template", {}, {
                         get: {method: 'GET', params: {}}
+                    }),
+                    calendarTemplateResource: defineResource(apiVer + "/calendar/template", {}, {
+                        get: {method: 'GET', params: {}}
+                    }),
+                    calendarResource: defineResource(apiVer + "/calendar/:calendarId", {calendarId:'@calendarId'}, {
+                        save: {method: 'POST', params: {}},
+                        get:  {method: 'GET', params: {}, isArray: true},
+                    }),
+                    calendarResources: defineResource(apiVer + "/calendar/test", {}, {
+                        get:  {method: 'GET', params: {}},
+                    }),
+                    feeStructureTemplateResource: defineResource(apiVer + "/feeStructure/template", {}, {
+                        get: {method: 'GET', params: {}}
+                    }),
+                    feeResource: defineResource(apiVer + "/feeStructure/:feeId", {feeId:'@feeId'}, {
+                        save: {method: 'POST', params: {}},
+                        get:  {method: 'GET', params: {}},
+                        update: { method: 'PUT'}
+
+                    }),
+                    feeDetailsResources: defineResource(apiVer + "/feeStructure", {}, {
+                        getAllfeeDetails:  {method: 'GET', params: {}},
+                    }),
+                    staffTemplateResource: defineResource(apiVer + "/staff/template", {}, {
+                        get: {method: 'GET', params: {}}
+                    }),
+                    studentAttendenceResource: defineResource(apiVer + "/studentAttendence", {}, {
+                        get: {method: 'GET', params: {}},
+                        update:{method: 'PUT'}
+
+                    }),
+                    leaveManagementResource: defineResource(apiVer + "/leaveManagement/template/:leavemanagementId", {leavemanagementId:'@leavemanagementId'}, {
+                        save: {method: 'POST', params: {}},
+                        get:  {method: 'GET', params: {}},
+                        update:{method: 'PUT'}
+                    }),
+                    leaveManagementSaveResource: defineResource(apiVer + "/leaveManagement/:leavemanagementId", {leavemanagementId:'@leavemanagementId'}, {
+                        save: {method: 'POST', params: {}},
+                        getAllleaveDetails:  {method: 'GET', params: {}},
+                        update:{method: 'PUT'}
+                    }),
+                    leavetemplateResource: defineResource(apiVer + "/leaveDetails/template", {}, {
+                        save: {method: 'POST', params: {}},
+                        get:  {method: 'GET', params: {}},
+                        update:{method: 'PUT'}
+                    }),
+                    leaveApplyResource: defineResource(apiVer + "/leaveDetails/:leaveId/:staffId", {leaveId:'@leaveId',staffId:'@staffId'}, {
+                        save: {method: 'POST', params: {}},
+                        getleaveDetails:  {method: 'GET', params: {}},
+                        update:{method: 'PUT'}
                     })
                 };
             }];

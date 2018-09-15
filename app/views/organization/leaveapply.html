@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<div class="content-container" ng-controller="LeaveApplyController">
+    <ul class="breadcrumb">
+        <li><a href="#/leavesummary">{{'label.anchor.applyLeave' | translate}}</a></li>
+    </ul>
+    <wizard current-step="step">
+        <wz-step icon="fa fa-circle-o" data-title="{{'label.heading.applyLeave' | translate}}">
+            <div class="card-content">
+                <form name="leaveapplyform" novalidate="" class="card form-horizontal well" rc-submit="submit()">
+                    <api-validate></api-validate>
+                    <fieldset>
+                        <legend>{{'label.heading.applyLeave' | translate}}</legend>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">
+                                {{'label.input.office' | translate}} <span ng-show="forceOffice == null" class="required">*</span>
+                            </label>
+                            <div class="col-sm-3">
+                                <div ng-show="forceOffice == null">
+                                    <select  id="officeId" ng-model="formData.officeid"  class="form-control"
+                                            ng-options="office.id as office.name for office in offices" value="{{office.id}}"
+                                            ng-change="changeOffice(formData.officeId)" ng-disabled="true"></select>
+                                </div>
+                                <div ng-show="forceOffice != null">
+                                    <p class="form-control-static">{{forceOffice.name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.input.department' | translate}}<span class="required" >*</span></label>
+                            <div class="col-sm-3">
+                                <select   id="departmentId" ng-model="formData.departmentid"  class="form-control"
+                                         ng-options="department.id as department.name for department in departments" value="{{department.id}}" ng-disabled="true">
+                                    <option value="">--{{'label.menu.department' | translate}}--</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.input.session' | translate}}<span class="required" >*</span></label>
+                            <div class="col-sm-3">
+                                <select   id="sessionId" ng-model="formData.sessionid"  class="form-control"
+                                         ng-options="session.id as session.name for session in sessions" value="{{session.id}}">
+                                    <option value="">--{{'label.menu.selectSession' | translate}}--</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" >{{'label.heading.employeeName' | translate}}<span class="required" >*</span> </label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" id="staffName" name="staffName" ng-model="staffName" ng-disabled="true" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.add.leavetype' | translate}}<span class="required" >*</span></label>
+                            <div class="col-sm-3">
+                                <select  id="leaveTypes" name="leaveTypes" ng-model="formDat.leaveType.id"
+                                        class="form-control"
+                                        ng-options="leaveType.id as leaveType.name for leaveType in leaveTypes"
+                                        value="{{leaveType.id}}">
+                                    <option value=""> {{'label.menu.leavetype' | translate}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.heading.fromdate' | translate}}<span class="required" >*</span></label>
+                            <div class="col-sm-3">
+                                <input id="fromDate" type="text" name="fromDate" datepicker-pop="dd MMMM yyyy"
+                                       ng-model="first.fromDate" is-open="opened1" max="restrictDate"  class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">{{'label.input.todate' | translate}}<span class="required" >*</span></label>
+                            <div class="col-sm-3">
+                                <input id="toDate" type="text" name="toDate" datepicker-pop="dd MMMM yyyy"
+                                       ng-model="first.toDate" is-open="opened1" max="restrictDate"  class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" >{{'label.input.ishalfday' | translate}}<span class="required" >*</span> </label>
+                            <div class="col-sm-3">
+                                <input class="input-mini-small" type="checkbox"
+                                       ng-model="formData.ishalfdays">
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="!formData.ishalfdays">
+                            <label class="control-label col-sm-2">{{'label.input.noOfDays' | translate}}<span class="required" >*</span></label>
+                            <div class="col-md-3">
+                                <input  type="text" class="form-control" id="noofdays" name="noofdays" ng-model="formData.noofdays"  />
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-offset-4">
+                            <a id="cancel" ng-href="{{cancel}}" class="btn btn-default">{{'label.button.cancel' | translate}}</a>
+                            <button id="save" type="submit" class="btn btn-primary" ng-hide="blockUI"
+                                    has-permission='CREATE_LEAVEMANAGEMENT'>{{'label.button.save' | translate}}
+                            </button>
+                            <button class="btn btn-info" ng-show="blockUI"><strong>{{'label.button.processing' |
+                                translate}}</strong></button>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+        </wz-step>
+    </wizard>
+</div>

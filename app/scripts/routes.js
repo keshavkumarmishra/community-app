@@ -944,7 +944,61 @@
             .when('/editadhocquery/:id', {
                 templateUrl: 'views/adhocquery/editadhocquery.html'
             })
-            ;
+            .when('/createalendar/',{
+                templateUrl: 'views/calendar/createclandar.html'
+
+            })
+            .when('/calendar/',{
+                templateUrl: 'views/calendar/calendar.html'
+
+            })
+            .when('/editcalendar/:id',{
+                templateUrl: 'views/calendar/editCalendar.html'
+
+            })
+            .when('/viewcalendar/:id',{
+                templateUrl: 'views/calendar/viewcalendar.html'
+
+            })
+            .when('/viewfeestructure/:id',{
+                templateUrl: 'views/feestructure/viewfeestructure.html'
+            })
+            .when('/feestructure',{
+                templateUrl: 'views/feestructure/feestructure.html'
+            })
+            .when('/editfeestructure/:id',{
+                templateUrl: 'views/feestructure/editfeestructure.html'
+            })
+            .when('/createfeestructure',{
+                templateUrl: 'views/feestructure/createfeestructure.html'
+            }).when('/addeducation/:id',{
+            templateUrl: 'views/organization/createemployeeeducation.html'
+            }).when('/addexperince/:id',{
+            templateUrl: 'views/organization/createStaffExperience.html'
+            }).when('/editexperince/:id',{
+            templateUrl: 'views/organization/editstaffexperience.html'
+            }).when('/editeducation/:id',{
+            templateUrl: 'views/organization/editStaffeducation.html'
+            }).when('/viewgroupattendance',{
+            templateUrl: 'views/groups/viewstudentattendence.html'
+            }).when('/viewstudentdetailattendence/:id/:classid',{
+            templateUrl: 'views/groups/viewstudentdetailsattendence.html'
+            }).when('/editstudentattendence/:id/:classid/:groupId',{
+            templateUrl: 'views/groups/editstudentattendencedetails.html'
+           }).when('/createleavemanagement',{
+            templateUrl: 'views/organization/createleavemanagement.html'
+           }).when('/leavemanagementdetails',{
+            templateUrl: 'views/organization/leavemanagement.html'
+           }).when('/viewleavemanagementdetails/:id',{
+            templateUrl: 'views/organization/viewleavemanagement.html'
+           }).when('/editleaveManagement/:id',{
+            templateUrl: 'views/organization/editleavemanagement.html'
+         }).when('/applyleave',{
+            templateUrl: 'views/organization/leaveapply.html'
+        });
+
+
+
         $locationProvider.html5Mode(false);
     };
     mifosX.ng.application.config(defineRoutes).run(function ($log) {

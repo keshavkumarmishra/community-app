@@ -27,8 +27,10 @@
             scope.addressArray=[];
             scope.formData.address=[];
             //familymembers
-            scope.formData.familyMembers=[];
+            scope.formData.familyDetails=[];
+            scope.formData.educationdetails=[];
             scope.familyArray=[];
+            scope.educationArray=[];
             scope.datatables = [];
             scope.noOfTabs = 1;
             scope.step = '-';
@@ -36,7 +38,8 @@
             scope.formDat.datatables = [];
             scope.tf = "HH:mm";
             scope.clientId = routeParams.clientId;
-
+            scope.secondfamilymember=false;
+            scope.familycount=0;
 
             var requestParams = {staffInSelectedOfficeOnly:true};
             if (routeParams.groupId) {
@@ -51,6 +54,9 @@
                 scope.formData.officeId = scope.offices[0].id;
                 scope.savingproducts = data.savingProductOptions;
                 scope.genderOptions = data.genderOptions;
+                scope.professionIdOptions=data.profession;
+                scope.qualifications=data.qualification;
+                scope.relationshipIdOptions=data.relationship;
                 scope.clienttypeOptions = data.clientTypeOptions;
                 scope.clientClassificationOptions = data.clientClassificationOptions;
                 scope.clientNonPersonConstitutionOptions = data.clientNonPersonConstitutionOptions;
@@ -172,11 +178,21 @@
             scope.addFamilyMember=function()
             {
                 scope.familyArray.push({});
+                scope.familycount++;
             }
 
             scope.removeFamilyMember=function(index)
             {
                 scope.familyArray.splice(index,1);
+            }
+            scope.addEducationDetails=function()
+            {
+                scope.educationArray.push({});
+            }
+
+            scope.removeEducationArray=function(index)
+            {
+                scope.educationArray.splice(index,1);
             }
 
 
@@ -440,7 +456,38 @@
 
                     temp.locale = scope.optlang.code;
                     temp.dateFormat = scope.df;
-                    scope.formData.familyMembers.push(temp);
+                    scope.formData.familyDetails.push(temp);
+                }
+
+
+                for(var i=0;i<scope.educationArray.length;i++)
+                {
+                    var temp=new Object();
+                    if(scope.educationArray[i].organasationName)
+                    {
+                        temp.organasationName=scope.educationArray[i].organasationName;
+                    }
+                    if(scope.educationArray[i].fromdate)
+                    {
+                        temp.fromdate=dateFilter(scope.educationArray[i].fromdate, scope.df);
+
+                    }
+                    if(scope.educationArray[i].todate)
+                    {
+                        temp.todate=dateFilter(scope.educationArray[i].todate,scope.df);
+                    }
+                    if(scope.educationArray[i].qualificationfrom)
+                    {
+                        temp.qualificationfrom=scope.educationArray[i].qualificationfrom;
+                    }
+                    if(scope.educationArray[i].qualificationto)
+                    {
+                        temp.qualificationto=scope.educationArray[i].qualificationto;
+                    }
+
+                    temp.locale = scope.optlang.code;
+                    temp.dateFormat = scope.df;
+                    scope.formData.educationdetails.push(temp);
                 }
 
                 //
